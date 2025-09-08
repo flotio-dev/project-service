@@ -53,3 +53,26 @@ Environment variables:
 - `KEYCLOAK_BASE_URL` and `KEYCLOAK_REALM`: used to fetch JWKS and validate JWTs.
 
 Podman detected on this machine: `podman --version` should return your installed version.
+
+## Devenv (Nix) 🍀
+
+This repo ships a `devenv` development environment for a local Postgres and app env vars without Docker.
+
+What you get:
+- A local Postgres 15 service on 127.0.0.1:5433
+- Env vars automatically exported when you `direnv allow`:
+  - `POSTGRES_USER=postgres`, `POSTGRES_PASSWORD=postgres`, `POSTGRES_DB=projectdb`, `DB_PORT=5433`
+  - `DATABASE_URL=postgres://postgres:postgres@127.0.0.1:5433/projectdb?sslmode=disable`
+
+How to use:
+1. Install direnv and devenv (see https://devenv.sh/)
+2. In the repo:
+	- `direnv allow`
+	- `devenv up` (optional; services auto-start on first use)
+3. Verify:
+	- `psql "$DATABASE_URL" -c 'select 1'`
+
+Notes:
+- Devenv Postgres listens on 5433 to avoid clashing with Docker/Podman 5432 mapping.
+- `.env` remains used by docker-compose; devenv variables are separate and injected by direnv.
+- You can override values by editing `devenv.nix` or exporting before `direnv allow`.

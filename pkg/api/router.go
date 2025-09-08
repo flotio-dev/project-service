@@ -11,6 +11,8 @@ import (
 
 func (a *API) Router() http.Handler {
 	r := mux.NewRouter()
+	// global logging middleware
+	r.Use(middleware.LoggingMiddleware)
 	// Public
 	r.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		httpx.OK(w, map[string]any{"status": "ok", "time": time.Now()})

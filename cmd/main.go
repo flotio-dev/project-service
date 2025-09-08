@@ -17,10 +17,15 @@ func main() {
 	if cfg.DatabaseURL == "" {
 		log.Println("warning: DATABASE_URL is empty")
 	}
+	log.Printf("connecting to database: %s", cfg.DatabaseURL)
 	gdb := db.Must(db.Connect(cfg.DatabaseURL))
+	log.Println("database connected")
+
+	log.Println("running automigrate...")
 	if err := db.AutoMigrate(gdb); err != nil {
 		log.Fatalf("automigrate failed: %v", err)
 	}
+	log.Println("automigrate completed")
 
 	// JWKS provider pour Keycloak
 	jwksURL := cfg.JWKSURL()
@@ -32,6 +37,7 @@ func main() {
 
 	apiSrv := &api.API{DB: gdb, JWKS: jwksProv}
 	r := apiSrv.Router()
+	log.Println("router constructed")
 
 	srv := &http.Server{
 		Addr:              fmt.Sprintf(":%d", cfg.HTTPPort),
