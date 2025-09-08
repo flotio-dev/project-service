@@ -1,30 +1,49 @@
 package main
 
 import (
-	"context"
+	"fmt"
 	"log"
+	"net/http"
 	"time"
 
-	grpcpb "github.com/flotio-dev/user-service/internal/userpb"
-	"google.golang.org/grpc"
+	"github.com/flotio-dev/user-service/configs"
+	"github.com/flotio-dev/user-service/pkg/api"
+	"github.com/flotio-dev/user-service/pkg/auth"
+	"github.com/flotio-dev/user-service/pkg/db"
 )
 
 func main() {
-	conn, err := grpc.NewClient("localhost:50051")
-	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+	cfg, _ := configs.FromEnv()
+	if cfg.DatabaseURL == "" {
+		log.Println("warning: DATABASE_URL is empty")
 	}
-	defer conn.Close()
+	gdb := db.Must(db.Connect(cfg.DatabaseURL))
+	if err := db.AutoMigrate(gdb); err != nil {
+		log.Fatalf("automigrate failed: %v", err)
+	}
 
-	client := grpcpb.NewUserServiceClient(conn)
-	_ = client
+	// JWKS provider pour Keycloak
+	jwksURL := cfg.JWKSURL()
+	issuer := cfg.IssuerURL()
+	var jwksProv *auth.JWKSProvider
+	if jwksURL != "" {
+		jwksProv = auth.NewJWKSProvider(jwksURL, issuer)
+	}
 
-	// Example usage: set a timeout context for requests
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
+	apiSrv := &api.API{DB: gdb, JWKS: jwksProv}
+	r := apiSrv.Router()
 
-	// _ = client // Use client for RPC calls
-	_ = ctx // Remove or use ctx as needed
+	srv := &http.Server{
+		Addr:              fmt.Sprintf(":%d", cfg.HTTPPort),
+		Handler:           r,
+		ReadHeaderTimeout: 5 * time.Second,
+		ReadTimeout:       10 * time.Second,
+		WriteTimeout:      15 * time.Second,
+		IdleTimeout:       60 * time.Second,
+	}
 
-	// Add your client calls here
+	log.Printf("listening on %s", srv.Addr)
+	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		log.Fatalf("server error: %v", err)
+	}
 }
