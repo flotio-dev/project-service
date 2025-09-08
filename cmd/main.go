@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/flotio-dev/user-service/configs"
-	"github.com/flotio-dev/user-service/pkg/api"
-	"github.com/flotio-dev/user-service/pkg/auth"
-	"github.com/flotio-dev/user-service/pkg/db"
+	"github.com/flotio-dev/project-service/configs"
+	"github.com/flotio-dev/project-service/pkg/api"
+	"github.com/flotio-dev/project-service/pkg/auth"
+	"github.com/flotio-dev/project-service/pkg/db"
 )
 
 func main() {

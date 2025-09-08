@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/flotio-dev/user-service/pkg/db"
-	"github.com/flotio-dev/user-service/pkg/httpx"
-	"github.com/flotio-dev/user-service/pkg/middleware"
+	"github.com/flotio-dev/project-service/pkg/db"
+	"github.com/flotio-dev/project-service/pkg/httpx"
+	"github.com/flotio-dev/project-service/pkg/middleware"
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
 )

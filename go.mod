@@ -1,4 +1,4 @@
-module github.com/flotio-dev/user-service
+module github.com/flotio-dev/project-service
 
 go 1.24.2
 

@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/flotio-dev/user-service/pkg/auth"
+	"github.com/flotio-dev/project-service/pkg/auth"
 	"gorm.io/gorm"
 )
 

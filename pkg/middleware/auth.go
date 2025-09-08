@@ -3,8 +3,8 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/flotio-dev/user-service/pkg/auth"
-	"github.com/flotio-dev/user-service/pkg/httpx"
+	"github.com/flotio-dev/project-service/pkg/auth"
+	"github.com/flotio-dev/project-service/pkg/httpx"
 )
 
 // RequireAuth vérifie le token Bearer via Keycloak JWKS et injecte sub/claims dans le contexte.
