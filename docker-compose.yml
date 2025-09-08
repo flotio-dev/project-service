@@ -11,7 +11,6 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     ports:
       - "${DB_PORT}:5432"
     healthcheck:
