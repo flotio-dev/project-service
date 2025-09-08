@@ -20,7 +20,7 @@ type Project struct {
 
 	Stats   []ProjectStats `gorm:"foreignKey:ProjectID" json:"-"`
 	Usages  []ProjectUsage `gorm:"foreignKey:ProjectID" json:"-"`
-	Branchs []Branch       `gorm:"foreignKey:ProjectID" json:"-"`
+	Branches []Branch      `gorm:"foreignKey:ProjectID" json:"-"`
 	EnvVars []EnvVar       `gorm:"foreignKey:ProjectID" json:"-"`
 	Builds  []Build        `gorm:"foreignKey:ProjectID" json:"-"`
 }
