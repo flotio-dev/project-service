@@ -46,4 +46,10 @@ Notes:
 - The `app` service in `docker-compose.yml` uses the repository `Dockerfile` to build the application image and expects the service to listen on port `8080`. Update if your app uses a different port.
 - The DB initialization script is mounted into `/docker-entrypoint-initdb.d/` so it runs only on first container start when the volume is empty.
 
+Environment variables:
+
+- `PORT`: HTTP port for the service (default 8080).
+- `DATABASE_URL`: Postgres connection string for the app.
+- `KEYCLOAK_BASE_URL` and `KEYCLOAK_REALM`: used to fetch JWKS and validate JWTs.
+
 Podman detected on this machine: `podman --version` should return your installed version.
